@@ -62,13 +62,22 @@ stop() ->
     mochiweb_http:stop(PName).
 
 loop(MochiReq) ->
+    
+    io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+    
     Req = webmachine:new_request(mochiweb, MochiReq),
+    
+    io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+    
     {ok, DispatchList} = application:get_env(webmachine, dispatch_list),
     Host = case host_headers(Req) of
                [H|_] -> H;
                [] -> []
            end,
     {Path, _} = Req:path(),
+    
+    io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+    
     case webmachine_dispatcher:dispatch(Host, Path, DispatchList) of
         {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens} ->
             {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
@@ -94,7 +103,12 @@ loop(MochiReq) ->
             XReq1 = {webmachine_request,RS1},
             {ok,RS2} = XReq1:set_metadata('resource_module', Mod),
             try 
-                webmachine_decision_core:handle_request(Resource, RS2)
+                io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+                
+                webmachine_decision_core:handle_request(Resource, RS2),
+                
+                io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+                
             catch
                 error:_ -> 
                     FailReq = {webmachine_request,RS2},

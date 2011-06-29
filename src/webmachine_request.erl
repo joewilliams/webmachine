@@ -254,6 +254,10 @@ call(log_data) -> {ReqState#wm_reqstate.log_data, ReqState};
 call(notes) -> {wrq:get_notes(ReqState#wm_reqstate.reqdata), ReqState}.
 
 get_header_value(K) ->
+    
+    io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+    io:format("Header: ~p~n", [K]),
+    
     {wrq:get_req_header(K, ReqState#wm_reqstate.reqdata), ReqState}.
 
 get_outheader_value(K) ->
