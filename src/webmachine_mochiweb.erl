@@ -82,12 +82,12 @@ loop(MochiReq) ->
         {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens} ->
             io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
             
-            %{ok, ErrorHandler} = application:get_env(webmachine, error_handler),
+            {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
             
             io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
             
-            %{ErrorHTML,ReqState1} = 
-            %    ErrorHandler:render_error(404, Req, {none, none, []}),
+            {ErrorHTML,ReqState1} = 
+                ErrorHandler:render_error(404, Req, {none, none, []}),
             
             io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
             
