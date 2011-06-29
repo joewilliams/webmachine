@@ -80,15 +80,29 @@ loop(MochiReq) ->
     
     case webmachine_dispatcher:dispatch(Host, Path, DispatchList) of
         {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens} ->
+            io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+            
             {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
             {ErrorHTML,ReqState1} = 
                 ErrorHandler:render_error(404, Req, {none, none, []}),
+            
+            io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+            
             Req1 = {webmachine_request,ReqState1},
             {ok,ReqState2} = Req1:append_to_response_body(ErrorHTML),
+            
+            io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+            
             Req2 = {webmachine_request,ReqState2},
             {ok,ReqState3} = Req2:send_response(404),
+            
+            io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+            
             Req3 = {webmachine_request,ReqState3},
             {LogData,_ReqState4} = Req3:log_data(),
+            
+            io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+            
             case application:get_env(webmachine,webmachine_logger_module) of
                 {ok, LogModule} ->
                     spawn(LogModule, log_access, [LogData]);
@@ -96,12 +110,28 @@ loop(MochiReq) ->
             end;
         {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings,
          AppRoot, StringPath} ->
+            io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+             
             BootstrapResource = webmachine_resource:new(x,x,x,x),
+            
+            io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+            
             {ok, Resource} = BootstrapResource:wrap(Mod, ModOpts),
+            
+            io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+            
             {ok,RS1} = Req:load_dispatch_data(Bindings,HostTokens,Port,
                                               PathTokens,AppRoot,StringPath),
+            
+            io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+            
             XReq1 = {webmachine_request,RS1},
+            
+            io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+            
             {ok,RS2} = XReq1:set_metadata('resource_module', Mod),
+            
+            
             try 
                 io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
                 
@@ -111,6 +141,8 @@ loop(MochiReq) ->
                 
             catch
                 error:_ -> 
+                    io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+                
                     FailReq = {webmachine_request,RS2},
                     {ok,RS3} = FailReq:send_response(500),
                     PostFailReq = {webmachine_request,RS3},
