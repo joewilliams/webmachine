@@ -37,6 +37,7 @@ stop() ->
     application:stop(webmachine).
 
 new_request(mochiweb, Request) ->
+    io:format("~p: Request: ~p~n", [?MODULE, Request]),
     Socket = Request:get(socket),
     Method = Request:get(method),
     Scheme = Request:get(scheme),
