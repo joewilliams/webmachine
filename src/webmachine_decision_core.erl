@@ -26,7 +26,7 @@
 -include("webmachine_logger.hrl").
 
 handle_request(Resource, ReqState) ->
-    io:format("~p: ReqState: ~p~nResource: ~p~n", [ReqState, Resource]),
+    io:format("~p: ReqState: ~p~nResource: ~p~n", [?MODULE, ReqState, Resource]),
     [erase(X) || X <- [decision, code, req_body, bytes_written, tmp_reqstate]],
     put(resource, Resource),
     put(reqstate, ReqState),
