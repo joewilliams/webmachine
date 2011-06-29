@@ -107,7 +107,7 @@ loop(MochiReq) ->
                 
                 webmachine_decision_core:handle_request(Resource, RS2),
                 
-                io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE]),
+                io:format("Module: ~p / Line: ~p~n", [?MODULE, ?LINE])
                 
             catch
                 error:_ -> 
